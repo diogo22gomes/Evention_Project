@@ -10,10 +10,12 @@
 - **EventionMobile** - Repositório com a Aplicação Mobile (Kotlin)
 - **EventionWeb** - Repositório com a Plataforma Web (React)
 - **KubernetsRun** - Repositório com a os ficheiros para instalar em ambiente cloud com Minikube Kubernets
+- **RabbitMQ** - Repositório com a os ficheiros o ambiente local de RabbitMQ
+- **collections** - Repositório com a os ficheiros de collections para Postman
 
 ---
 
-## API Arquitetura de Microsserviços (Node.js)
+## Serviços API - Arquitetura de Microsserviços (Node.js)
 
 - **Event** - Serviço de Eventos
 - **Location** - Serviço de Localizações
