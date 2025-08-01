@@ -1,4 +1,4 @@
-# Evention Project
+# Evention Project (2024/2025)
 
 **Evention** é a aplicação oficial para Android da plataforma **Evention**, permitindo aos utilizadores **criar, aderir e acompanhar eventos** de forma simples, rápida e intuitiva.
 
