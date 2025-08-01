@@ -8,7 +8,7 @@
 
 - **APIGateway** - Ficheiros para criar a API Gateway
 - **EventionMobile** - Repositório com a Aplicação Mobile (Kotlin)
-- **EventionWeb** - Repositório com a Plataforma Web (React)
+- **EventionWeb** - Repositório com a Plataforma Web para Administradores (React)
 - **KubernetsRun** - Repositório com a os ficheiros para instalar em ambiente cloud com Minikube Kubernets
 - **RabbitMQ** - Repositório com a os ficheiros o ambiente local de RabbitMQ
 - **collections** - Repositório com a os ficheiros de collections para Postman
@@ -37,7 +37,7 @@
 
 ---
 
-# Web Platform
+# Web Platform (For Admin)
 
 <img width="4617" height="4352" alt="Dashboard" src="https://github.com/user-attachments/assets/13977d7e-86c4-4c15-9299-31e255eca034" />
 <img width="6098" height="3818" alt="Users" src="https://github.com/user-attachments/assets/a587b5e5-efb2-4dc3-ae44-aec38a70fe3a" />
