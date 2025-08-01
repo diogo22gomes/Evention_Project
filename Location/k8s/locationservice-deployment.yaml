@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: locationservice-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: locationservice
+  template:
+    metadata:
+      labels:
+        app: locationservice
+    spec:
+      containers:
+      - name: locationservice
+        image: pedromartins70/locationservice:latest 
+        ports:
+        - containerPort: 5005
+        env:
+          - name: DB_HOST
+            value: "locationservice-db-service"  
+          - name: DB_PORT
+            value: "5432"                  
+          - name: DB_USER
+            value: "locationservice_user"      
+          - name: DB_PASSWORD
+            value: "locationservice_pass"      
+          - name: DB_NAME
+            value: "locationservice_db" 

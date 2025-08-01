@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-api-gateway
+  labels:
+    app: nginx-api-gateway
+spec:
+  selector:
+    app: nginx-api-gateway
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 5010
+      targetPort: 5010

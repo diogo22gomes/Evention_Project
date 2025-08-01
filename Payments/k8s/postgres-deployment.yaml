@@ -1,0 +1,58 @@
+# StatefulSet para gerenciar o PostgreSQL
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: paymentservice-db
+  labels:
+    app: paymentservice-db
+spec:
+  serviceName: "paymentservice-db-service" # Nome do serviço usado para resolver o endereço interno do banco
+  replicas: 1
+  selector:
+    matchLabels:
+      app: paymentservice-db
+  template:
+    metadata:
+      labels:
+        app: paymentservice-db
+    spec:
+      containers:
+        - name: paymentservice-db
+          image: postgres:alpine 
+          env:
+            - name: POSTGRES_USER
+              value: "paymentservice_user"      
+            - name: POSTGRES_PASSWORD
+              value: "paymentservice_pass"      
+            - name: POSTGRES_DB
+              value: "paymentservice_db"    # Nome DB
+          ports:
+            - containerPort: 5432     # Porta padrão do PostgreSQL
+          volumeMounts:
+            - name: paymentservice-db-data
+              mountPath: /var/lib/postgresql/data # Diretório de dados
+  volumeClaimTemplates:
+    - metadata:
+        name: paymentservice-db-data
+      spec:
+        accessModes:
+          - ReadWriteMany
+        resources:
+          requests:
+            storage: 2Gi
+
+---
+# Serviço para expor o PostgreSQL dentro e fora do cluster
+apiVersion: v1
+kind: Service
+metadata:
+  name: paymentservice-db-service
+  labels:
+    app: paymentservice-db
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 5435           # Porta do serviço
+      targetPort: 5432     # Porta no container
+  selector:
+    app: paymentservice-db        # Seleciona o StatefulSet pelo label

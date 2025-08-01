@@ -1,0 +1,32 @@
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: userservice-pv-volume
+  labels:
+    type: local
+    app: userservice-db
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 2Gi
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: "/mnt/data/userservice-db" 
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: userservice-pv-claim
+  labels:
+    app: userservice-db
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 2Gi

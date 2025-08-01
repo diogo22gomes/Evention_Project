@@ -1,0 +1,19 @@
+
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl"]
+}
+
+model Location {
+  locationId String @id @default(uuid()) @db.Uuid
+  localtown   String @db.VarChar(300)
+  city        String @db.VarChar(300)
+
+  @@map("Locations") 
+}

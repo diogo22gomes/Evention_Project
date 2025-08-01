@@ -1,0 +1,229 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Location API",
+    "version": "1.0.0",
+    "description": "This API allows users to manage locations."
+  },
+  "servers": [
+    {
+      "url": "/location/api",
+      "description": "Local server"
+    }
+  ],
+  "paths": {
+    "/location": {
+      "get": {
+        "summary": "Get all locations",
+        "operationId": "getAllLocations",
+        "tags": ["Locations"],
+        "responses": {
+          "200": {
+            "description": "A list of locations",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Location"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No locations found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new location",
+        "operationId": "createLocation",
+        "tags": ["Locations"],
+        "requestBody": {
+          "description": "Location data to create",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LocationInput"
+              },
+              "example": {
+                "localtown": "Downtown Springfield",
+                "city": "Springfield"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Location created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Location"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request - Missing required fields"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/location/{id}": {
+      "get": {
+        "summary": "Get a specific location by ID",
+        "operationId": "getLocationById",
+        "tags": ["Locations"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the location",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Location found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Location"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Location not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update a specific location by ID",
+        "operationId": "updateLocation",
+        "tags": ["Locations"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the location",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Updated location data",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LocationInput"
+              },
+              "example": {
+                "localtown": "Downtown Springfield",
+                "city": "Springfield"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Location updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Location"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Location not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a specific location by ID",
+        "operationId": "deleteLocation",
+        "tags": ["Locations"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of the location to delete",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Location deleted successfully"
+          },
+          "404": {
+            "description": "Location not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Location": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "ID of the location"
+          },
+          "localtown": {
+            "type": "string",
+            "description": "UUID of the local town"
+          },
+          "city": {
+            "type": "string",
+            "description": "Name of the city"
+          }
+        }
+      },
+      "LocationInput": {
+        "type": "object",
+        "required": ["localtown", "city"],
+        "properties": {
+          "localtown": {
+            "type": "string",
+            "description": "UUID of the local town"
+          },
+          "city": {
+            "type": "string",
+            "description": "Name of the city"
+          }
+        }
+      }
+    }
+  }
+}

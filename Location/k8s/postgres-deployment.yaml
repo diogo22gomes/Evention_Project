@@ -1,0 +1,58 @@
+# StatefulSet para gerenciar o PostgreSQL
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: locationservice-db
+  labels:
+    app: locationservice-db
+spec:
+  serviceName: "locationservice-db-service"
+  replicas: 1
+  selector:
+    matchLabels:
+      app: locationservice-db
+  template:
+    metadata:
+      labels:
+        app: locationservice-db
+    spec:
+      containers:
+        - name: locationservice-db
+          image: postgres:alpine 
+          env:
+            - name: POSTGRES_USER
+              value: "locationservice_user"      
+            - name: POSTGRES_PASSWORD
+              value: "locationservice_pass"      
+            - name: POSTGRES_DB
+              value: "locationservice_db" 
+          ports:
+            - containerPort: 5432    
+          volumeMounts:
+            - name: locationservice-db-data
+              mountPath: /var/lib/postgresql/data 
+  volumeClaimTemplates:
+    - metadata:
+        name: locationservice-db-data
+      spec:
+        accessModes:
+          - ReadWriteMany
+        resources:
+          requests:
+            storage: 2Gi
+
+---
+# Serviço para expor o PostgreSQL dentro e fora do cluster
+apiVersion: v1
+kind: Service
+metadata:
+  name: locationservice-db-service
+  labels:
+    app: locationservice-db
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 5436          
+      targetPort: 5432     
+  selector:
+    app: locationservice-db      

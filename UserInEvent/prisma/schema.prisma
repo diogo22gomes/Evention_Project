@@ -1,0 +1,36 @@
+
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl"]
+}
+
+model UserInEvent {
+  ticketID      String   @id @default(uuid()) @db.Uuid
+  event_id      String   @db.Uuid 
+  user_id       String   @db.Uuid
+  feedback_id   String?  @unique @db.Uuid
+  createdAt     DateTime @default(now())
+  participated  Boolean
+
+  feedback      Feedback? @relation(fields: [feedback_id], references: [feedbackID]) // Define relação com Feedback
+
+  @@map("UserInEvents")
+}
+
+model Feedback {
+  feedbackID    String   @id @default(uuid()) @db.Uuid
+  rating        Int
+  commentary    String   @db.VarChar(150)
+
+  userInEvent   UserInEvent? // Relacionamento opcional com UserInEvent
+
+  @@map("Feedbacks")
+}
+
+

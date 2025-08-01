@@ -1,0 +1,57 @@
+
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: userservice-db
+  labels:
+    app: userservice-db
+spec:
+  serviceName: "userservice-db-service" 
+  replicas: 1
+  selector:
+    matchLabels:
+      app: userservice-db
+  template:
+    metadata:
+      labels:
+        app: userservice-db
+    spec:
+      containers:
+        - name: userservice-db
+          image: postgres:alpine 
+          env:
+            - name: POSTGRES_USER
+              value: "userservice_user"      
+            - name: POSTGRES_PASSWORD
+              value: "userservice_pass"      
+            - name: POSTGRES_DB
+              value: "userservice_db"   
+          ports:
+            - containerPort: 5432   
+          volumeMounts:
+            - name: userservice-db-data
+              mountPath: /var/lib/postgresql/data 
+  volumeClaimTemplates:
+    - metadata:
+        name: userservice-db-data
+      spec:
+        accessModes:
+          - ReadWriteMany
+        resources:
+          requests:
+            storage: 2Gi
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: userservice-db-service
+  labels:
+    app: userservice-db
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 5432          
+      targetPort: 5432    
+  selector:
+    app: userservice-db       

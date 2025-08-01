@@ -1,0 +1,32 @@
+# PersistentVolume para armazenar os dados do PostgreSQL
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: userineventservice-pv-volume
+  labels:
+    type: local
+    app: userineventservice-db
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 2Gi
+  accessModes:
+    - ReadWriteMany
+  hostPath:
+    path: "/mnt/data/userineventservice-db" 
+
+---
+# PersistentVolumeClaim para utilizar o PV acima
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: userineventservice-pv-claim
+  labels:
+    app: userineventservice-db
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 2Gi

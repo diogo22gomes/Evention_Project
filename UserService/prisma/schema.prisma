@@ -1,0 +1,49 @@
+
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl"]
+}
+
+
+model User {
+  userID      String   @id @default(uuid()) @db.Uuid
+  username    String   @db.VarChar(40)
+  phone       Int?     
+  email       String   @db.VarChar(50) @unique
+  password    String?   @db.VarChar(255)
+  status      Boolean  @default(true) 
+  createdAt   DateTime @default(now())
+  loginType   String   
+  userType    UserType @relation(fields: [usertype_id], references: [userTypeID])
+  usertype_id String   @db.Uuid
+  address     Address?
+  profilePicture  String?  @db.VarChar(255)
+
+  @@map("Users") 
+}
+
+model UserType {
+  userTypeID String @id @default(uuid()) @db.Uuid
+  type       String @db.VarChar(20)
+  users      User[] 
+  @@map("UserTypes") 
+}
+
+model Address {
+  addressID    String   @id @default(uuid())
+  road         String   @db.VarChar(20)
+  roadNumber   Int
+  postCode     String   @db.VarChar(20)
+  NIF          String?  @db.VarChar(20) 
+  localtown_id String
+  user         User     @relation(fields: [user_id], references: [userID])
+  user_id      String   @unique @db.Uuid
+
+  @@map("Addresses") 
+}

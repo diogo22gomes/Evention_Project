@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-api-gateway-deployment
+  labels:
+    app: nginx-api-gateway
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx-api-gateway
+  template:
+    metadata:
+      labels:
+        app: nginx-api-gateway
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:latest
+        ports:
+        - containerPort: 5010
+        volumeMounts:
+        - name: nginx-config-volume
+          mountPath: /etc/nginx/conf.d
+        - name: nginx-main-config-volume  
+          mountPath: /etc/nginx/nginx.conf 
+          subPath: nginx.conf
+        - name: tls-certs
+          mountPath: /etc/nginx/certs
+          readOnly: true
+      volumes:
+      - name: nginx-config-volume
+        configMap:
+          name: nginx-config
+      - name: nginx-main-config-volume   
+        configMap:
+          name: nginx-main-config       
+      - name: tls-certs
+        secret:
+          secretName: nginx-tls-secret

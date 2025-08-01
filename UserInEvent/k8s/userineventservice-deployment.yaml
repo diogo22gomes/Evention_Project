@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: userineventservice-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: userineventservice
+  template:
+    metadata:
+      labels:
+        app: userineventservice
+    spec:
+      containers:
+        - name: userineventservice
+          image: a23893/userineventservice:latest
+          ports:
+            - containerPort: 5003
+          env:
+            - name: DB_HOST
+              value: "userineventservice-db-service"
+            - name: DB_PORT
+              value: "5432"
+            - name: DB_USER
+              value: "userineventservice_user"
+            - name: DB_PASSWORD
+              value: "userineventservice_pass"
+            - name: DB_NAME
+              value: "userineventservice_db"
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
